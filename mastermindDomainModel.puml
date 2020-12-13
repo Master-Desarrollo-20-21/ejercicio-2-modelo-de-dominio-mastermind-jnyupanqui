@@ -1,0 +1,59 @@
+@startuml mastermindDomainModel
+Game *-- Turn
+Game *-- "2" Player
+Game *-- Board
+
+Board *-- ShieldRow
+Board *-- "12" HintRow
+Board *-- "12" DecoderRow
+Board *-- TryRow
+
+Player <|-- Codemaker
+Player <|-- Codebreaker
+
+Player o-- Board
+Turn o-- Player
+
+Codemaker *-- Secret
+Codemaker *-- Hint
+Codebreaker *-- Proposed
+Codebreaker *-- TryIndicator
+
+Code <|-- Secret
+Code <|-- Proposed
+
+Hint <|-- Legal
+Hint <|-- Ilegal
+
+DecoderRow o-- Proposed
+ShieldRow o-- Secret
+HintRow o-- Hint
+TryRow o-- TryIndicator
+
+Token *-- Color
+Token <|-- CodePeg
+Token <|-- TryPeg
+Token <|-- KeyPeg
+Hint *-- "0..5" KeyPeg
+Code *-- "5" CodePeg
+TryIndicator *-- TryPeg
+
+' Business logic
+'
+Player o-- Goal
+Goal <|-- SecretCodeGuessed
+
+Action <|-- ColorAndPositionMatching
+Action <|-- ColorMatching
+ColorMatching <|-- Bonus
+ColorMatching <|--Penalty
+
+SecretCodeGuessed ..> "1..12" Action
+
+Action ..> Secret : target
+Action ..> Proposed
+Action ..> TryIndicator
+
+ColorMatching ..> Hint
+ColorAndPositionMatching ..> Turn
+@enduml
